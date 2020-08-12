@@ -6,27 +6,25 @@ from selenium.webdriver.common.keys import Keys
 class InstaBot():
 
     # constructor
-    def __init__(self, username, password, speed_factor):
+    def __init__(self, driver_path, speed_factor):
         # default values
         self.followers = []
         self.following = []
-        self.__username = username
-        self.__password = password
         self.sf = speed_factor
         # open chrome instance with instagram url
-        self.chrome = webdriver.Chrome(executable_path = 'resources/chromedriver.exe')
-        self.chrome.get('https://www.instagram.com')
+        self.browser = webdriver.Chrome(executable_path = driver_path)
+        self.browser.get('https://www.instagram.com')
         # wait 3 secs for the page to load
         time.sleep(3 * self.sf)
 
     # authentication
-    def authenticate(self):
+    def authenticate(self, username, password):
         # get the input fields
-        input_username = self.chrome.find_elements_by_css_selector('form input')[0]
-        input_password = self.chrome.find_elements_by_css_selector('form input')[1]
+        input_username = self.browser.find_elements_by_css_selector('form input')[0]
+        input_password = self.browser.find_elements_by_css_selector('form input')[1]
         # fill the credentials
-        input_username.send_keys(self.__username)
-        input_password.send_keys(self.__password)
+        input_username.send_keys(username)
+        input_password.send_keys(password)
         # enter key = login button click
         input_password.send_keys(Keys.ENTER)
         # wait 3 secs for the page to load
@@ -35,12 +33,12 @@ class InstaBot():
     # open profile
     def open_profile(self):
         # find and toggle profile menu
-        profile_link_toggle = self.chrome.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/span')
+        profile_link_toggle = self.browser.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/span')
         profile_link_toggle.click()
         # sleep 1 sec
         time.sleep(1 * self.sf)
         # find and click profile link
-        profile_link = self.chrome.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div/div[2]/div/div/div/div')
+        profile_link = self.browser.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div/div[2]/div/div/div/div')
         profile_link.click()
         # wait 3 secs for the page to load
         time.sleep(3 * self.sf)
@@ -49,13 +47,13 @@ class InstaBot():
     def get_followers(self):
         # find, count and open followers list
         print('\nOPENING FOLLOWERS')
-        followers_link = self.chrome.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]/a')
-        followers_count = int(self.chrome.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]/a/span').text)
+        followers_link = self.browser.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]/a')
+        followers_count = int(self.browser.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[2]/a/span').text)
         followers_link.click()
         # sleep 3 sec
         time.sleep(3 * self.sf)
         # get container of followers
-        followers_container = self.chrome.find_element_by_xpath('/html/body/div[4]/div/div/div[2]')
+        followers_container = self.browser.find_element_by_xpath('/html/body/div[4]/div/div/div[2]')
         # loop scroll till all followers are lazy-loaded
         print('LAZY-LOADING ALL FOLLOWERS')
         count = 0
@@ -66,7 +64,7 @@ class InstaBot():
                 else: print('COMPLETED SCRAPING FOLLOWERS LIST SUCCESSFULLY')
                 break
             count = new_count
-            self.chrome.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight', followers_container)
+            self.browser.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight', followers_container)
             time.sleep(3 * self.sf)
             # increased load times as the list grows
             if count > 350: time.sleep(1 * self.sf)
@@ -80,7 +78,7 @@ class InstaBot():
             print(data[0])
         # find and click on close button
         print('---------------\nCLOSING FOLLOWERS\n')
-        close_button = self.chrome.find_element_by_xpath('/html/body/div[4]/div/div/div[1]/div/div[2]/button')
+        close_button = self.browser.find_element_by_xpath('/html/body/div[4]/div/div/div[1]/div/div[2]/button')
         close_button.click()
         time.sleep(1 * self.sf)
 
@@ -88,13 +86,13 @@ class InstaBot():
     def get_following(self):
         # find, count and open following list
         print('\nOPENING FOLLOWING')
-        following_link = self.chrome.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[3]/a')
-        following_count = int(self.chrome.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[3]/a/span').text)
+        following_link = self.browser.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[3]/a')
+        following_count = int(self.browser.find_element_by_xpath('/html/body/div[1]/section/main/div/header/section/ul/li[3]/a/span').text)
         following_link.click()
         # sleep 3 sec
         time.sleep(3 * self.sf)
         # get container of following
-        following_container = self.chrome.find_element_by_xpath('/html/body/div[4]/div/div/div[2]')
+        following_container = self.browser.find_element_by_xpath('/html/body/div[4]/div/div/div[2]')
         # loop scroll till all following are lazy-loaded
         print('LAZY LOADING ALL FOLLOWING')
         count = 0
@@ -105,7 +103,7 @@ class InstaBot():
                 else: print('COMPLETED SCRAPING FOLLOWING SUCCESSFULLY ({new_count}/{following_count})')
                 break
             count = new_count
-            self.chrome.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight', following_container)
+            self.browser.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight', following_container)
             time.sleep(3 * self.sf)
             # increased load times as the list grows
             if count > 350: time.sleep(1 * self.sf)
@@ -119,7 +117,7 @@ class InstaBot():
             print(data[0])
         # find and click on close button
         print('-----------------\nCLOSING FOLLOWING\n')
-        close_button = self.chrome.find_element_by_xpath('/html/body/div[4]/div/div/div[1]/div/div[2]/button')
+        close_button = self.browser.find_element_by_xpath('/html/body/div[4]/div/div/div[1]/div/div[2]/button')
         close_button.click()
         time.sleep(1 * self.sf)
 

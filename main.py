@@ -1,16 +1,17 @@
 from bot import InstaBot
 
 
-# credentials
+# credentials and settings
 USERNAME = ''
 PASSWORD = ''
+DRIVER = 'resources/chromedriver.exe'
 SPEED_FACTOR = 1
 
 # create an instabot instance
-bot = InstaBot(USERNAME, PASSWORD, SPEED_FACTOR)
+bot = InstaBot(driver_path = DRIVER, speed_factor = SPEED_FACTOR)
 
 # login and navigate to profile page
-bot.authenticate()
+bot.authenticate(username = USERNAME, password = PASSWORD)
 bot.open_profile()
 
 # get followers and followings details
