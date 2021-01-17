@@ -102,7 +102,7 @@ class InstaBot():
             print(data[0])
         # find and click on close button
         print('---------------\nCLOSING FOLLOWERS\n')
-        close_button = self.browser.find_element_by_xpath('/html/body/div[4]/div/div/div[1]/div/div[2]/button')
+        close_button = self.browser.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/div/div[2]/button')
         close_button.click()
         # wait 2 secs for the list to close
         time.sleep(2 * self.sf)
@@ -153,7 +153,7 @@ class InstaBot():
             print(data[0])
         # find and click on close button
         print('-----------------\nCLOSING FOLLOWING\n')
-        close_button = self.browser.find_element_by_xpath('/html/body/div[4]/div/div/div[1]/div/div[2]/button')
+        close_button = self.browser.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/div/div[2]/button')
         close_button.click()
         # wait 2 seconds for the list to close
         time.sleep(2 * self.sf)
@@ -176,3 +176,8 @@ class InstaBot():
         # check following status in each of followers
         result = [x['username'] for x in self.followers if x['following'] == False]
         return result
+
+    # close selenium driver
+    def close(self):
+        self.browser.quit()
+        exit(0)

@@ -2,8 +2,8 @@ from bot import InstaBot
 
 
 # credentials and settings
-USERNAME = 'shamilsdq'
-PASSWORD = '#abu4IG'
+USERNAME = ''
+PASSWORD = ''
 DRIVER = 'resources/chromedriver.exe'
 SPEED_FACTOR = 1
 
@@ -27,3 +27,5 @@ for user in bot.get_following_only():
 print('\n\nNOT FOLLOWING THEM BACK\n--------------------')
 for user in bot.get_follower_only():
     print(user)
+
+bot.close()
