@@ -2,8 +2,8 @@ from bot import InstaBot
 
 
 # credentials and settings
-USERNAME = ''
-PASSWORD = ''
+USERNAME = 'shamilsdq'
+PASSWORD = '#abu4IG'
 DRIVER = 'resources/chromedriver.exe'
 SPEED_FACTOR = 1
 
